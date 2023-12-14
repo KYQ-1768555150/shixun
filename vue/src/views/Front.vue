@@ -62,13 +62,14 @@
 <script>
 
 export default {
-  name: "FrontLayout",
+  name: 'FrontLayout',
 
   data () {
     return {
       top: '',
       notice: [],
       user: JSON.parse(localStorage.getItem("xm-user") || '{}'),
+      name:''
     }
   },
 

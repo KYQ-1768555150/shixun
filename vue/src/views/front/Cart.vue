@@ -11,7 +11,21 @@
             </el-select>
           </div>
           <div style="flex: 1; font-size: 16px; text-align: right; padding-right: 20px">
-            已选商品 ￥ {{totalPrice}} <el-button type="danger" round @click="pay">下单</el-button>
+            已选商品 ￥ {{totalPrice}} <el-button type="danger" round @click="showConfirmCodeDialog()">下单</el-button>
+
+            <el-dialog title="剩余支付时间（超时自动关闭）" :visible.sync="dialogVisible" center width="25%" >
+              <div style="display: flex;flex-direction: column;align-items: center;justify-content: center;">
+                <div class="time"><i class="el-icon-time"></i> {{min}}分钟 {{sec}}秒 </div>
+                <img src="@/assets/imgs/duolaAmeng.gif" alt=" ">
+              </div>
+              
+              <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消支付</el-button>
+        <el-button type="primary" @click="confirmDelete()">确定支付</el-button>
+      </span>
+            </el-dialog>
+
+
           </div>
         </div>
         <div style="margin: 20px 0; padding: 0 50px">
@@ -80,6 +94,11 @@ export default {
       addressId: null,
       addressData: [],
       selectedData: [],
+      dialogVisible: false,
+      countdownTimer: null, // 添加一个计时器变量
+
+      min:'',
+      sec:''
     }
   },
   mounted() {
@@ -88,6 +107,63 @@ export default {
   },
   // methods：本页面所有的点击事件或者其他函数定义区
   methods: {
+    //弹窗输入对话框
+    showConfirmCodeDialog() {
+      this.min = '';
+      this.sec = '';
+      this.clearCountdownTimer(); // 清除旧的计时器
+
+      this.dialogVisible = true; // 显示弹窗
+      this.countdown()
+
+    },
+    //自动取消
+    auto_cancellation(){
+      this.clearCountdownTimer(); // 清除计时器
+      this.dialogVisible=false
+    },
+    //确定
+    confirmDelete() {
+      this.clearCountdownTimer(); // 清除计时器
+      this.dialogVisible=false
+      this.pay()
+
+    },
+    //清除计数器
+    clearCountdownTimer() {
+      if (this.countdownTimer) {
+        clearInterval(this.countdownTimer); // 清除计时器
+        this.countdownTimer = null; // 将计时器变量置为 null
+      }
+    },
+    //倒计时
+    countdown() {
+      const end = Date.now() + (15 * 60 * 1000); // 当前时间加上十五分钟的毫秒数
+      const that = this;
+
+      function updateTimer() {
+        const now = Date.now();
+        const msec = end - now;
+
+        if (msec < 0) return;
+
+        const min = Math.floor(msec / 1000 / 60);
+        const sec = Math.floor(msec / 1000 % 60);
+
+        that.min = min > 9 ? min : '0' + min;
+        that.sec = sec > 9 ? sec : '0' + sec;
+
+        if (min === 0 && sec === 0) {
+          // 倒计时结束执行操作
+          that.auto_cancellation();
+          return;
+        }
+
+      }
+      updateTimer(); // 更新一次时间，避免显示初始值为 15:00
+      this.countdownTimer = setInterval(updateTimer, 1000); // 设置计时器
+
+    },
     loadAddress() {
       this.$request.get('/address/selectAll').then(res => {
         if (res.code === '200') {
