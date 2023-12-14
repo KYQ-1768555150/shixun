@@ -1,6 +1,7 @@
 <template>
   <div class="main-content">
-    <div style="height: 60px; background-color: #C566F6FF"></div>
+    <div style="height: 1px"></div>
+    <div style="height: 30px; background-color: #C566F6FF"></div>
     <div style="display: flex">
       <div class="left"></div>
       <div style="width: 66%; background-color: white; height: 1000px">
@@ -9,7 +10,7 @@
           <div style="flex: 2">
             <div style="display: flex; color: #666666FF; margin: 14px 0" v-for="item in typeData">
               <img :src="item.img" alt="" style="height: 20px; width: 20px">
-              <div style="margin-left: 10px; font-size: 14px">{{item.name}}</div>
+              <div style="margin-left: 10px; font-size: 14px" ><a href="#" @click="navTo('/front/type?id=' + item.id)">{{item.name}}</a></div>
             </div>
           </div>
           <div style="flex: 5; margin-top: 15px">
@@ -52,20 +53,28 @@
             </div>
             <div style="display: flex; margin-top: 50px">
               <div style="flex: 1; text-align: center">
-                <img src="@/assets/imgs/收藏.png" alt="" style="height: 25px; width: 25px">
-                <div>我的收藏</div>
+                <a href="#" @click="navTo('/front/collect')">
+                  <img src="@/assets/imgs/收藏.png" alt="" style="height: 25px; width: 25px">
+                  <div>我的收藏</div>
+                </a>
               </div>
               <div style="flex: 1; text-align: center">
-                <img src="@/assets/imgs/店铺.png" alt="" style="height: 25px; width: 25px">
-                <div>我的地址</div>
+                <a href="#" @click="navTo('/front/address')">
+                  <img src="@/assets/imgs/店铺.png" alt="" style="height: 25px; width: 25px">
+                  <div>我的地址</div>
+                </a>
               </div>
               <div style="flex: 1; text-align: center">
+                <a href="#" @click="navTo('/front/cart')">
                 <img src="@/assets/imgs/购物车.png" alt="" style="height: 25px; width: 25px">
                 <div>我的购物车</div>
+                </a>
               </div>
               <div style="flex: 1; text-align: center">
+                <a href="#" @click="navTo('/front/orders')">
                 <img src="@/assets/imgs/订单.png" alt="" style="height: 25px; width: 25px">
                 <div>我的订单</div>
+                </a>
               </div>
             </div>
           </div>
@@ -74,6 +83,16 @@
         <div style="margin: 10px 5px 0 5px">
           <el-row>
             <el-col :span="5" v-for="item in goodsData">
+              <img @click="navTo('/front/detail?id=' + item.id)" :src="item.img" alt="" style="width: 100%; height: 175px; border-radius: 10px; border: #cccccc 1px solid">
+              <div style="margin-top: 10px; font-weight: 500; font-size: 16px; width: 180px; color: #000000FF; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{item.name}}</div>
+              <div style="margin-top: 5px; font-size: 20px; color: #FF5000FF">￥ {{item.price}} / {{item.unit}}</div>
+            </el-col>
+          </el-row>
+        </div>
+        <div style="margin: 40px 0 0 15px; height: 40px; background-color: #04BF04FF; font-size: 20px; color: white; width: 130px; font-weight: bold; line-height: 40px; text-align: center; border-radius: 20px">猜你喜欢</div>
+        <div style="margin: 10px 5px 0 5px">
+          <el-row>
+            <el-col :span="5" v-for="item in recommendData">
               <img @click="navTo('/front/detail?id=' + item.id)" :src="item.img" alt="" style="width: 100%; height: 175px; border-radius: 10px; border: #cccccc 1px solid">
               <div style="margin-top: 10px; font-weight: 500; font-size: 16px; width: 180px; color: #000000FF; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{item.name}}</div>
               <div style="margin-top: 5px; font-size: 20px; color: #FF5000FF">￥ {{item.price}} / {{item.unit}}</div>
@@ -112,6 +131,7 @@ export default {
         require('@/assets/imgs/carousel-10.png'),
       ],
       goodsData: [],
+      recommendData:[],
 
     }
   },
@@ -119,9 +139,20 @@ export default {
     this.loadType()
     this.loadNotice()
     this.loadGoods()
+    this.loadRecommend()
   },
   // methods：本页面所有的点击事件或者其他函数定义区
   methods: {
+    loadRecommend(){
+      this.$request.get('/goods/recommend').then(res=>{
+        if (res.code==='200'){
+          this.recommendData=res.data
+        }else {
+          this.$message.error(res.msg)
+        }
+      })
+    }
+    ,
     loadType() {
       this.$request.get('/type/selectAll').then(res => {
         if (res.code === '200') {
@@ -170,6 +201,7 @@ export default {
   /*overflow: hidden;*/
   background-size: 100%;
   background-image: url('@/assets/imgs/img.png');
+  background-color: #2a60c9;
 }
 .left {
   width: 17%;

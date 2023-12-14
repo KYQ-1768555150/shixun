@@ -25,6 +25,7 @@ public class GoodsController {
         return Result.success();
     }
 
+
     /**
      * 删除
      */
@@ -69,6 +70,16 @@ public class GoodsController {
         List<Goods> list = goodsService.selectAll(goods);
         return Result.success(list);
     }
+    @GetMapping("/selectByTypeId")
+    public Result selectByTypeId(@RequestParam Integer id){
+        List<Goods> list= goodsService.selectByTypeId(id);
+        return Result.success(list);
+    }
+    @GetMapping("/selectByName")
+    public Result selectByName(@RequestParam String name){
+        List<Goods> list= goodsService.selectByName(name);
+        return Result.success(list);
+    }
 
     /**
      * 分页查询
@@ -84,6 +95,18 @@ public class GoodsController {
     @GetMapping("/selectTop15")
     public Result selectTop15() {
         List<Goods> list = goodsService.selectTop15();
+        return Result.success(list);
+    }
+
+    @GetMapping("/recommend")
+    public Result recommend(){
+        List<Goods> list=goodsService.recommend();
+        return Result.success(list);
+    }
+
+    @GetMapping("/selectByBusinessId")
+    public Result selectByBusinessId(@RequestParam Integer id) {
+        List<Goods> list = goodsService.selectByBusinessId(id);
         return Result.success(list);
     }
 }
