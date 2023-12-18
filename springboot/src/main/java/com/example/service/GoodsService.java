@@ -273,16 +273,17 @@ public class GoodsService {
         List<Goods> recommendResult = goodsIds.stream().map(goodsId -> allGoods.stream()
                         .filter(x -> x.getId().equals(goodsId)).findFirst().orElse(null))
                 .limit(10).collect(Collectors.toList());
-
-        //        if (CollectionUtil.isEmpty(recommendResult)) {
-        //            // 随机给它推荐10个
-        //            return getRandomGoods(10);
-        //        }
-        //        if (recommendResult.size() < 10) {
-        //            int num = 10 - recommendResult.size();
-        //            List<Goods> list = getRandomGoods(num);
-        //            result.addAll(list);
-        //        }
+                if (CollectionUtil.isEmpty(recommendResult)) {
+                    // 随机给它推荐10个
+                    return getRandomGoods(10);
+                }
+                if (recommendResult.size() < 10) {
+                    result=recommendResult;
+                    int num = 10 - recommendResult.size();
+                    List<Goods> list = getRandomGoods(num);
+                    result.addAll(list);
+                    return result;
+                }
         return recommendResult;
     }
 
