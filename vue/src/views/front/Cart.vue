@@ -96,7 +96,7 @@ export default {
       selectedData: [],
       dialogVisible: false,
       countdownTimer: null, // 添加一个计时器变量
-
+      defaultAddress:{},
       min:'',
       sec:''
     }
@@ -112,7 +112,6 @@ export default {
       this.min = '';
       this.sec = '';
       this.clearCountdownTimer(); // 清除旧的计时器
-
       this.dialogVisible = true; // 显示弹窗
       this.countdown()
 
@@ -168,6 +167,11 @@ export default {
       this.$request.get('/address/selectAll').then(res => {
         if (res.code === '200') {
           this.addressData = res.data
+          this.defaultAddress=this.addressData[0]
+          if (this.addressData.length > 0) {
+            this.defaultAddress = this.addressData[0];
+            this.addressId = this.defaultAddress.id;
+          }
         } else {
           this.$message.error(res.msg)
         }
