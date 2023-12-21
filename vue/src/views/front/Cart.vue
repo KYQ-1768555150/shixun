@@ -13,10 +13,9 @@
           <div style="flex: 1; font-size: 16px; text-align: right; padding-right: 20px">
             已选商品 ￥ {{totalPrice}} <el-button type="danger" round @click="showConfirmCodeDialog()">下单</el-button>
 
-            <el-dialog title="剩余支付时间（超时自动关闭）" :visible.sync="dialogVisible" center width="25%" >
-              <div style="display: flex;flex-direction: column;align-items: center;justify-content: center;">
+            <el-dialog title="剩余支付时间（超时自动关闭）" :visible.sync="dialogVisible" center width="25%">
+              <div style="display: flex;flex-direction: column;align-items: center;justify-content: center">
                 <div class="time"><i class="el-icon-time"></i> {{min}}分钟 {{sec}}秒 </div>
-                <img src="@/assets/imgs/duolaAmeng.gif" alt=" ">
               </div>
               
               <span slot="footer" class="dialog-footer">
@@ -109,6 +108,14 @@ export default {
   methods: {
     //弹窗输入对话框
     showConfirmCodeDialog() {
+      if (!this.addressId) {
+        this.$message.warning('请选择收货地址')
+        return
+      }
+      if (!this.selectedData || this.selectedData.length === 0) {
+        this.$message.warning('请选择商品')
+        return
+      }
       this.min = '';
       this.sec = '';
       this.clearCountdownTimer(); // 清除旧的计时器
@@ -229,14 +236,7 @@ export default {
       })
     },
     pay() {
-      if (!this.addressId) {
-        this.$message.warning('请选择收货地址')
-        return
-      }
-      if (!this.selectedData || this.selectedData.length === 0) {
-        this.$message.warning('请选择商品')
-        return
-      }
+
       let data = {
         userId: this.user.id,
         addressId: this.addressId,
@@ -255,3 +255,11 @@ export default {
   }
 }
 </script>
+<style>
+.el-dialog{
+  background-repeat: no-repeat;
+  background-image: url("@/assets/imgs/pink2.gif");
+  background-size: cover;
+
+}
+</style>
