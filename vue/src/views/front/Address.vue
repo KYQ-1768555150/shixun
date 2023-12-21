@@ -12,11 +12,12 @@
         <div style="margin: 20px 0; padding: 0 50px">
           <div class="table">
             <el-table :data="addressData" strip>
-              <el-table-column prop="username" label="收货人" width="350px"></el-table-column>
+              <el-table-column prop="username" label="收货人" width="230px"></el-table-column>
               <el-table-column prop="useraddress" label="收货地址"></el-table-column>
               <el-table-column prop="phone" label="联系电话"></el-table-column>
-              <el-table-column label="操作" align="center" width="180">
+              <el-table-column label="操作" align="center" width="250">
                 <template v-slot="scope">
+                  <el-button size="mini" type="primary" plain @click="updateDefaultAddress(scope.row)" v-if="scope.row.defalut===0">默认</el-button>
                   <el-button size="mini" type="primary" plain @click="editAddress(scope.row)">编辑</el-button>
                   <el-button size="mini" type="danger" plain @click="del(scope.row.id)">删除</el-button>
                 </template>
@@ -94,6 +95,33 @@ export default {
     editAddress(row) {
       this.form = JSON.parse(JSON.stringify(row))
       this.formVisible = true
+    },
+    updateDefaultAddress(row){
+      this.form = JSON.parse(JSON.stringify(row))
+      var defaultAddress=this.addressData[0]
+      this.addressData.forEach((obj)=>{
+        if (obj.defalut===1){
+          defaultAddress=obj
+          defaultAddress.defalut=0
+          this.$request.put('/address/update', defaultAddress).then(res => {
+            if (res.code === '200') {
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
+        }
+      })
+
+      defaultAddress=this.form
+      defaultAddress.defalut=1
+      this.$request.put('/address/update', defaultAddress).then(res => {
+        if (res.code === '200') {
+          this.$message.success('默认地址已更改')
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+      document.location.reload();
     },
     save() {   // 保存按钮触发的逻辑  它会触发新增或者更新
       this.$refs.formRef.validate((valid) => {

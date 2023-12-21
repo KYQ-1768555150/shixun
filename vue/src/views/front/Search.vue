@@ -51,6 +51,7 @@ export default {
       this.$request.get('/goods/recommend').then(res=>{
         if (res.code==='200'){
           this.recommendData=res.data
+          this.recommendData=this.recommendData.slice(0,Math.ceil(this.goodsData.length/4))
         }else {
           this.$message.error(res.msg)
         }

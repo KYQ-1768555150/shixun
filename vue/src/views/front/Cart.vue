@@ -169,7 +169,12 @@ export default {
           this.addressData = res.data
           this.defaultAddress=this.addressData[0]
           if (this.addressData.length > 0) {
-            this.defaultAddress = this.addressData[0];
+            this.addressData.forEach((obj)=>{
+              if (obj.defalut===1){
+                this.defaultAddress = obj;
+              }
+            })
+
             this.addressId = this.defaultAddress.id;
           }
         } else {

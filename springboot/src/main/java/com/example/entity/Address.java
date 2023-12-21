@@ -14,4 +14,5 @@ public class Address implements Serializable {
     private String username;
     private String useraddress;
     private String phone;
+    private Integer defalut;
 }

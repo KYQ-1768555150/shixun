@@ -16,7 +16,7 @@
           <div style="font-size: 16px; height: 30px; line-height: 30px; color: #7F7F7FFF">店铺邮箱</div>
           <div style="font-size: 16px; height: 30px; line-height: 30px; ">{{businessData.email}}</div>
         </div>
-        <div style="flex: 1; height: 100px; padding: 20px">
+        <div style="flex: 1; height: 100px; padding: 20px;width: 150px" >
           <div style="height: 60px; line-height: 30px; font-size: 16px; color: #000000FF; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
             店铺介绍：{{businessData.description}}
           </div>

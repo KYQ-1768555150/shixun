@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div style="width: 400px; padding: 30px; background-color: white; border-radius: 5px;">
+    <div style="width: 400px; padding: 30px; background-color: rgba(255,255,255,0.15); border-radius: 5px;">
       <div style="text-align: center; font-size: 20px; margin-bottom: 20px; color: #333">欢迎使用</div>
       <el-form :model="form" :rules="rules" ref="formRef">
         <el-form-item prop="username">
@@ -17,7 +17,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button style="width: 100%; background-color: #333; border-color: #333; color: white" @click="login">登 录</el-button>
+          <el-button class="bT" style="width: 100%; background-color: rgba(255,255,255,0.2); border-color: #333; color: white" @click="login"><a href="#">登 录</a></el-button>
         </el-form-item>
 
         <div style="display: flex; align-items: center">
@@ -33,7 +33,6 @@
     </div>
   </div>
 </template>
-
 <script>
 export default {
   name: "Login",
@@ -75,12 +74,11 @@ export default {
   }
 }
 </script>
-
 <style scoped>
 .container {
   height: 100vh;
   overflow: hidden;
-  background-image: url("@/assets/imgs/bg.jpg");
+  background-image: url("@/assets/imgs/test.jpg");
   background-size: 100%;
   display: flex;
   align-items: center;
@@ -90,4 +88,8 @@ export default {
 a {
   color: #2a60c9;
 }
+a:hover{
+  color: red;
+}
+
 </style>

@@ -62,20 +62,44 @@ const router = new VueRouter({
 
 // 注：不需要前台的项目，可以注释掉该路由守卫
 // 路由守卫
-router.beforeEach((to ,from, next) => {
+router.beforeEach((to, from, next) => {
   let user = JSON.parse(localStorage.getItem("xm-user") || '{}');
   if (to.path === '/') {
     if (user.role) {
       if (user.role === 'USER') {
         next('/front/home')
+      } else if (user.role === 'BUSINESS') {
+        next('/business')
       } else {
         next('/login')
       }
     } else {
       next('/home')
     }
-  } else {
-    next()
+  }  else if (to.path.startsWith('/front') && (user.role === 'BUSINESS' || user.role==='ADMIN')) {
+    // 用户界面限制，如果角色不是用户，则弹出提示并返回原来的界面
+    if (user.role==='ADMIN') {
+      localStorage.removeItem('xm-user');
+      next()
+      localStorage.getItem("xm-user")
+    }else {
+      localStorage.removeItem('xm-user');
+      next();
+    }
+
+  }else if (to.path.startsWith('/business') && user.role === 'USER') {
+    // 商家界面限制，如果角色不是商家，则弹出提示并返回原来的界面
+   alert('无法访问商家页面')
+    next(from.path || '/');
+  }else if (to.path.startsWith('/admin') && user.role !== 'ADMIN'){
+    alert('无法访问')
+    if (user.role==='BUSINESS')
+      next('/business')
+    else
+    next(from.path || '/');
+  }
+   else {
+    next();
   }
 })
 

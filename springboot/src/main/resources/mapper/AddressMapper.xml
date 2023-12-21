@@ -7,7 +7,6 @@
     <sql id="Base_Column_List">
         id,user_id,username,useraddress,phone
     </sql>
-
     <select id="selectAll" resultType="com.example.entity.Address">
         select address.*
         from address
@@ -17,6 +16,7 @@
             <if test="username != null"> and username = #{username}</if>
             <if test="useraddress != null"> and useraddress = #{useraddress}</if>
             <if test="phone != null"> and phone = #{phone}</if>
+            <if test="defalut != null"> and defalut = #{defalut}</if>
         </where>
     </select>
 
@@ -64,6 +64,9 @@
             </if>
             <if test="phone != null">
                 phone = #{phone},
+            </if>
+            <if test="defalut !=null">
+                defalut=#{defalut},
             </if>
         </set>
         where id = #{id}
